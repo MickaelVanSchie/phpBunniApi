@@ -2,8 +2,8 @@
 
 namespace phpBunniApi\Api;
 
-
 use phpBunni\Api\Exception\ApiException;
+use phpBunniApi\Api\Resources\Invoices\InvoicesResource;
 
 class phpBunniApi
 {
@@ -12,6 +12,10 @@ class phpBunniApi
     public $apiUrl = null;
 
     public $apiVersion = "0.1";
+
+
+    // Invoice Resource
+    public $invoices;
 
 
     public function setApiKey($apiKey)
@@ -35,7 +39,8 @@ class phpBunniApi
         return $this->apiUrl;
     }
 
-    protected function buildHeaders() {
+    protected function buildHeaders()
+    {
         return stream_context_create(['http' => ['header' => array(
             "Accept: application/json", "Authorization: Bearer " . $this->apiKey, "Content-Type: application/json")]]);
     }
@@ -53,5 +58,15 @@ class phpBunniApi
             echo("businessId not set");
         }
         return file_get_contents($this->buildApiUrl() . $endpoint, false, $this->buildHeaders());
+    }
+
+    public function initializeResources()
+    {
+        $this->invoices = new InvoicesResource($this);
+    }
+
+    public function __construct()
+    {
+        $this->initializeResources();
     }
 }
