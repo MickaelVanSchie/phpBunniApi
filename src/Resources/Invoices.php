@@ -1,17 +1,25 @@
 <?php
 
-namespace phpBunniApi\Api\Resources\Invoices;
 
+namespace phpBunniApi\Api\Resources\Invoices;
+require_once('ResourceAbstract.php');
+
+use phpBunni\Api\Exception\NotImplementedException;
 use phpBunniApi\Api;
 use ResourceAbstract;
 
 class InvoicesResource extends ResourceAbstract
 {
-    public function test() {
+    public function List()
+    {
         echo($this->client->apiKey);
     }
 
-    public function InvoiceListEndpoint() {
-        echo($this->client->apiKey);
+    public function CreatePdf() {
+        throw new NotImplementedException("This function has not been implemented.");
+    }
+
+    public function CreateOrUpdate() {
+        throw new NotImplementedException("This function has not been implemented.");
     }
 }

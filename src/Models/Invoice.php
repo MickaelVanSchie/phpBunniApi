@@ -4,7 +4,8 @@ class Invoice
 {
     public $invoiceDate;
     public $invoiceNumber;
-    public $rows;
+    /** @var Row[] $rows */
+    private $rowsArray;
     public $isFinalized;
     public $duePeriodDays;
     public $pdfUrl;
@@ -25,12 +26,13 @@ class Invoice
         string $taxMode,
         InvoiceDesign $design,
         string $externalId,
-        Contact $contact
+        Contact $contact,
+        string $pdfUrl
     )
     {
         $this->invoiceDate = $invoiceDate;
         $this->invoiceNumber = $invoiceNumber;
-        $this->rows = $rows;
+        $this->setRows(...$rows);
         $this->isFinalized = $isFinalized;
         $this->duePeriodDays = $duePeriodDays;
         $this->id = $id;
@@ -38,5 +40,14 @@ class Invoice
         $this->design = $design;
         $this->externalId = $externalId;
         $this->contact = $contact;
+        $this->pdfUrl = $pdfUrl;
+    }
+
+    public function setRows (Row ...$rows) {
+        $this->rowsArray = $rows;
+    }
+
+    public function rows() {
+        return $this->rowsArray;
     }
 }

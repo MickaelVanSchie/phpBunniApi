@@ -2,6 +2,8 @@
 
 namespace phpBunniApi\Api;
 
+require_once("Resources/Invoices.php");
+
 use phpBunni\Api\Exception\ApiException;
 use phpBunniApi\Api\Resources\Invoices\InvoicesResource;
 
@@ -18,25 +20,25 @@ class phpBunniApi
     public $invoices;
 
 
-    public function setApiKey($apiKey)
+    public function setApiKey($apiKey): phpBunniApi
     {
         $this->apiKey = $apiKey;
 
         return $this;
     }
 
-    public function setBusinessId($businessId)
+    public function setBusinessId($businessId): phpBunniApi
     {
         $this->businessId = $businessId;
 
         return $this;
     }
 
-    public function buildApiUrl()
+    public function buildApiUrl(string $endpoint): string
     {
         $this->apiUrl = "https://api.bunni.nl/" . $this->apiVersion . "/" . $this->businessId . "/";
 
-        return $this->apiUrl;
+        return "$this->apiUrl" . $endpoint;
     }
 
     protected function buildHeaders()
@@ -50,14 +52,12 @@ class phpBunniApi
         $apiKey = $this->apiKey;
         $businessId = $this->businessId;
         if (!isset($apiKey)) {
-            // todo: throw exception.
-            echo("apkikey not set");
+            throw new ApiException("API key is required");
         }
-        if (!$businessId) {
-            // todo: throw exception.
-            echo("businessId not set");
+        if (!isset($businessId)) {
+            throw new ApiException("Business ID is required");
         }
-        return file_get_contents($this->buildApiUrl() . $endpoint, false, $this->buildHeaders());
+        return file_get_contents($this->buildApiUrl($endpoint), false, $this->buildHeaders());
     }
 
     public function initializeResources()
